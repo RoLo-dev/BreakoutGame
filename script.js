@@ -4,6 +4,10 @@ const brickRowCount = 9;
 const brickColumnCount = 5;
 
 let score = 0;
+function Score(){
+    context.font = '20px Arial';
+    context.fillText(`Score: ${score}`, canvas.width - 100, 30);
+}
 
 const ball = {
     x: canvas.width / 2,
@@ -13,7 +17,6 @@ const ball = {
     dx: 4,
     dy: -4
 }
-
 function drawBall(){
     context.beginPath();
     context.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
@@ -28,21 +31,14 @@ const paddle = {
     w: 80,
     h: 10,
     speed: 8,
-    d: 0
+    dx: 0
 }
-
 function drawPaddle(){
     context.beginPath();
     context.rect(paddle.x, paddle.y, paddle.w, paddle.h);
     context.fillStyle = '#0095dd';
     context.fill();
     context.closePath();
-}
-
-
-function Score(){
-    context.font = '20px Arial';
-    context.fillText(`Score: ${score}`, canvas.width - 100, 30);
 }
 
 const brickInfo = {
@@ -72,13 +68,103 @@ function drawBricks(){
     }))
 }
 
+function movePaddle(){
+    paddle.x += paddle.dx;
+    if(paddle.x + paddle.w > canvas.width){
+        paddle.x = canvas.width - paddle.w;
+    }
+    if(paddle.x < 0){
+        paddle.x = 0;
+    }
+}
+
+function moveBall(){
+    ball.x += ball.dx;
+    ball.y += ball.dy;
+    if(ball.x + ball.size > canvas.width || ball.x - ball.size < 0){
+        ball.dx *= -1;
+    }
+    if(ball.y + ball.size > canvas.height || ball.y - ball.size < 0){
+        ball.dy *= -1;
+    }
+    if(
+        ball.x - ball.size > paddle.x && 
+        ball.x + ball.size < paddle.x + paddle.w &&
+        ball.y + ball.size > paddle.y
+    ){
+        ball.dy = -ball.speed;
+    }
+
+    bricks.forEach(column => {
+        column.forEach(brick => {
+            if(brick.visible){
+                if(
+                    ball.x - ball.size > brick.x &&
+                    ball.x + ball.size < brick.x + brick.w &&
+                    ball.y + ball.size > brick.y &&
+                    ball.y - ball.size < brick.y + brick.h
+                ){
+                    ball.dy *= -1; 
+                    brick.visible = false;
+
+                    increaseScore();
+                }
+            }
+        })
+    })
+
+    if(ball.y + ball.size > canvas.height){
+        showAllBricks();
+        score = 0;
+    }
+}
+
+function increaseScore(){
+    score++;
+    if(score % (brickRowCount * brickRowCount) === 0){
+        showAllBricks();
+    }
+}
+function showAllBricks(){
+    bricks.forEach(column => {
+        column.forEach(brick => (brick.visible = true));
+    });
+}
+
 function draw(){
+    context.clearRect(0,0, canvas.width, canvas.height);
     drawBall();
     drawPaddle();
     Score();
     drawBricks();
 }
-draw();
+
+function update(){
+    movePaddle();
+    moveBall();
+    draw();
+    requestAnimationFrame(update);
+}
+update();
+
+document.addEventListener('keydown', keyDown);
+document.addEventListener('keyup', keyUp);
+
+function keyDown(e){
+    if(e.key === 'Right' || e.key === 'ArrowRight'){
+        paddle.dx = paddle.speed;
+    } else if(e.key === 'Left' || e.key === 'ArrowLeft'){
+        paddle.dx = -paddle.speed;
+    }
+}
+function keyUp(e){
+    if(
+        e.key === 'Right' ||
+        e.key === 'ArrowRight' ||
+        e.key === 'Left' ||
+        e.key === 'ArrowLeft' 
+    ){ paddle .dx = 0 }
+}
 
 
 const rulesBtn = document.getElementById('rules-btn');
