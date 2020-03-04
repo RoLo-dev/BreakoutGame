@@ -1,7 +1,7 @@
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 const brickRowCount = 9;
-const brickColumnCount = 5;
+const brickColumnCount = 8;
 
 let score = 0;
 function Score(){
@@ -20,7 +20,7 @@ const ball = {
 function drawBall(){
     context.beginPath();
     context.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
-    context.fillStyle = '#0095dd';
+    context.fillStyle = '#D15D1F';
     context.fill();
     context.closePath();
 }
@@ -36,7 +36,7 @@ const paddle = {
 function drawPaddle(){
     context.beginPath();
     context.rect(paddle.x, paddle.y, paddle.w, paddle.h);
-    context.fillStyle = '#0095dd';
+    context.fillStyle = '#fff';
     context.fill();
     context.closePath();
 }
@@ -44,7 +44,7 @@ function drawPaddle(){
 const brickInfo = {
     w: 70,
     h: 20,
-    padding: 10,
+    margin: 10,
     offSetX: 45,
     offSetY: 60,
     visible: true
@@ -53,8 +53,8 @@ const bricks = [];
 for(let i = 0; i < brickRowCount; i++){
     bricks[i] = [];
     for(let j = 0; j < brickColumnCount; j++){
-        const x = i * (brickInfo.w + brickInfo.padding) + brickInfo.offSetX;
-        const y = j * (brickInfo.h + brickInfo.padding) + brickInfo.offSetY;
+        const x = i * (brickInfo.w + brickInfo.margin) + brickInfo.offSetX;
+        const y = j * (brickInfo.h + brickInfo.margin) + brickInfo.offSetY;
         bricks[i][j] = {x,y, ...brickInfo};
     }
 }
@@ -62,7 +62,7 @@ function drawBricks(){
     bricks.forEach(column => column.forEach(brick => {
         context.beginPath();
         context.rect(brick.x, brick.y, brick.w, brick.h);
-        context.fillStyle = brick.visible ? '#0095dd' : 'transparent';
+        context.fillStyle = brick.visible ? '#D15D1F' : 'transparent';
         context.fill();
         context.closePath();
     }))
