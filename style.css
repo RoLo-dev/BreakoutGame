@@ -6,33 +6,43 @@
 body{
     display: flex;
     flex-direction: column;
-    background-color: #0095dd;
+    background-color: #22282C;
     align-items: center;
     justify-content: center;
     font-family: Arial, Helvetica, sans-serif;
     min-height: 100vh;
 }
+header{
+    width: 800px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
 h1{
     font-size: 45px;
     color: #fff;
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
 }
 canvas{
-    background: #f0f0f0;
+    background: #2C343A;
     border-radius: 10px;
     display: block;
 }
 .btn{
     cursor: pointer;
-    background: #000;
+    background: #D15D1F;
     border: 0;
-    padding: 10px 20px;
+    padding: 6px 20px;
+    font-size: 0.75rem;
     color: #fff;
     outline: 0;
-    border-radius: 5px;
+    transition: all 0.5s ease-in;
 }
 .btn:hover{
-    background: #222;
+    background: #374149;
+    box-shadow: 3px 3px 5px #15191C;
+    transition: all 0.3s ease-out;
 }
 .btn:active,
 #close-btn:active{
@@ -57,11 +67,6 @@ canvas{
     transform: rotate(-180deg);
     transition: all 0.3s ease-in;
 }
-.rules-btn{
-    position: absolute;
-    top: 30px;
-    left: 30px;
-}
 .rules>*{
     margin-bottom: 1rem;
 }
@@ -69,7 +74,7 @@ canvas{
     position: absolute;
     top: 0;
     left: 0;
-    background: #333;
+    background: #15191C;
     color: #fff;
     min-height: 100vh;
     width: 400px;
